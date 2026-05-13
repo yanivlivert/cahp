@@ -1,0 +1,12 @@
+datasets
+evaluate
+kmedoids
+kneed
+loguru
+matplotlib
+numpy
+pandas
+scikit-learn
+torch
+tqdm
+transformers
