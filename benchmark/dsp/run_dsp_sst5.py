@@ -180,7 +180,7 @@ def main():
     train_dataset = SST5Dataset(hf_dataset["train"]) if training_args.do_train else None
     eval_dataset  = SST5Dataset(hf_dataset["test"])  if training_args.do_eval else None
 
-    # We evaluate on TEST set (ACSP consistency)
+    # We evaluate on TEST set (CAHP consistency)
     metric_name = "eval_accuracy"
     
     logger.info(

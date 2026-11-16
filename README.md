@@ -2,7 +2,7 @@
 
 Welcome to the official implementation of **CAHP (Complementary Attention Head Pruning)**.
 
-This repository accompanies the research article **"Complementary Attention Head Pruning for Efficient Transformers"**.
+This repository accompanies the research article **"Complementary Attention Head Pruning for Efficient Transformers"**, published at the **2026 International Joint Conference on Neural Networks (IJCNN)** ([IEEE Xplore](https://ieeexplore.ieee.org/document/11728979)).
 
 ### 🌟 Project Overview
 Transformer-based models are powerful but computationally expensive, making them difficult to deploy on edge devices or in real-time applications. **CAHP** is an automated, post-hoc framework designed to bridge the gap between theoretical prunability and practical deployment.
@@ -14,11 +14,11 @@ Instead of looking at attention heads in isolation or relying on unstable gradie
 * **Post-Hoc:** Works on pre-trained models without requiring expensive retraining from scratch.
 * **Structurally Aware:** Preserves the "functional core" of the model, typically found in the intermediate layers, avoiding the "proximity bias" seen in traditional methods.
 
-### 🤝 Shoutout to ACSP
-CAHP builds upon the foundational principles of **Automatic Complementary Separation Pruning (ACSP)**. While CAHP is specifically evolved for the unique structural dependencies of self-attention in Transformers, the original ACSP logic pioneered the automated, graph-based pruning approach.
+### 🤝 Shoutout to CoSeP (formerly ACSP)
+CAHP builds upon the foundational principles of **Complementary Separability Pruning (CoSeP)**, which our article refers to by its earlier name, **Automatic Complementary Separation Pruning (ACSP)**. While CAHP is specifically evolved for the unique structural dependencies of self-attention in Transformers, the original CoSeP logic pioneered the automated, graph-based pruning approach.
 
 To gain a broader understanding of this methodology and to see how this logic is applied to **Convolutional (CNN)** and **Linear** settings, we highly recommend checking out the original work:
-> [**Automatic Complementary Separation Pruning Toward Lightweight CNNs**](https://arxiv.org/abs/2505.13225) by David Levin and Gonen Singer.
+> [**CoSeP: Complementary Separability Pruning via Class-Separability Clustering**](https://arxiv.org/abs/2505.13225) by David Levin and Gonen Singer (BMVC 2026).
 
 ---
 
@@ -102,6 +102,9 @@ We have provided a `benchmark/` folder containing modified files to support **SS
 #### 1. DSP
 * **Files:** `run_dsp_sst5.py`, `run_dsp_mnli.py`
 * **Placement:** `/transformers/examples/pruning/`
+* **Multi-GPU Compatibility Fixes:** We also provide four library files with slight compatibility fixes that make multi-GPU (`DataParallel`) runs possible. They do not change the DSP method itself. Copy them into the following folders, overriding the original files where they exist:
+    * `trainer_dsp.py`, `modeling_gated_bert.py` and `__init__.py` into `/transformers/src/transformers/`.
+    * `glue.py` into `/transformers/src/transformers/data/metrics/` (a new file).
 * **Usage:** Run these files instead of the original `run_dsp.py`.
 * **CLI Parameter Note:** When executing, ensure the `cooldown_steps` parameter is correctly specified based on the dataset and DSP variant:
     * **SST-5:** Use **90** for pipelined DSP and **270** for joint DSP.
@@ -122,15 +125,28 @@ We have provided a `benchmark/` folder containing modified files to support **SS
 
 ## 📂 Repository Structure
 ```text
-cahp/               # Core engine (data_types, graph clustering, pruner logic)
-benchmark/          # Modified baseline files for DSP, PASS, and AttAttr
-use_case/           # Scripts for dataset preparation and model initialization
+cahp/                # Core engine (data_types, graph clustering, pruner logic)
+cahp/config.py       # Global configuration and logger setup
+benchmark/           # Modified baseline files for DSP, PASS, and AttAttr
+use_case/            # Scripts for dataset preparation and model initialization
 pruning_algorithm.py # Main entry point for the CAHP algorithm
-config.py           # Global configuration and logger setup
-requirements.txt    # Project dependencies
+requirements.txt     # Project dependencies
 ```
 ---
 
 ## 📝 Citation
 If you find this work useful for your research, please cite our paper:
-*TBA*
+
+> Y. Livertovsky, S. Somin, and G. Singer, "Complementary Attention Head Pruning for Efficient Transformers," in *2026 International Joint Conference on Neural Networks (IJCNN)*, Maastricht, Netherlands, 2026, pp. 1–8, doi: [10.1109/IJCNN69854.2026.11728979](https://doi.org/10.1109/IJCNN69854.2026.11728979).
+
+```bibtex
+@inproceedings{livertovsky2026cahp,
+  title     = {Complementary Attention Head Pruning for Efficient Transformers},
+  author    = {Livertovsky, Yaniv and Somin, Shahar and Singer, Gonen},
+  booktitle = {2026 International Joint Conference on Neural Networks (IJCNN)},
+  pages     = {1--8},
+  year      = {2026},
+  publisher = {IEEE},
+  doi       = {10.1109/IJCNN69854.2026.11728979}
+}
+```
